@@ -131,9 +131,10 @@ module udp_rx #(
         m_axis_tvalid   = '0;
         m_axis_tlast    = '0;
 
-        // TODO is this what we want?
-        assign s_axis_tready = (state != IDLE) || (s_axis_tvalid && !invalid_flag);
+        // TODO how do we want to do this
+        s_axis_tready = 1'b1;
 
+        // TODO fucking beat mismatch somwhere fix it, then buffer output axi to work correctly
         unique case (state)
 
             IDLE: begin
@@ -220,7 +221,7 @@ module udp_rx #(
             // TODO actually check checksums this is invalid rn
             UDP_HEAD_2: begin
                 if (s_axis_tvalid) begin
-                    if (s_axis_tdata[15:0] == UDP_CHECKSUM)
+                    if (1)   // s_axis_tdata[15:0] == UDP_CHECKSUM
                         next_state = DATA_PASSTHROUGH;
                     else
                         invalid_flag_next = 1'b1;
